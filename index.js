@@ -1,108 +1,108 @@
-const inputWrapper = document.querySelector('.input-wrapper');
-const input = createElement('input', 'search-input');
-const selectRepositories = createElement('ul', 'select-repositories');
-const savedRepositories = document.querySelector('.saved-repositories');
-const btnDelete = createElement('button', 'btn-delete');
+const inputForm = document.querySelector(".input-form");
+const input = createElement("input", "search-input");
+const selectRepo = createElement("ul", "select-repo");
+const savedRepo = document.querySelector(".saved-repo");
+const btnDel = createElement("button", "btn-del");
 let result;
 
-const startSearch = debounce(searchRepository, 500);
+const startSearch = debounce(searchRepo, 500);
 
-inputWrapper.append(input);
-inputWrapper.append(selectRepositories);
+inputForm.append(input);
+inputForm.append(selectRepo);
 
-input.addEventListener('keyup', startSearch);
+input.addEventListener("keyup", startSearch);
 
-selectRepositories.addEventListener('click', (e) => {
-    let target = e.target;
-    saveRepository(target);
-    selectRepositories.textContent = '';
-    input.value = '';
-})
+selectRepo.addEventListener("click", (e) => {
+  let target = e.target;
+  saveRepository(target);
+  selectRepo.textContent = "";
+  input.value = "";
+});
 
-savedRepositories.addEventListener('click', (e) => {
-    let target = e.target;
+savedRepo.addEventListener("click", (e) => {
+  let target = e.target;
 
-    if (target.classList.contains('btn-delete')) {
-        target.parentElement.remove();
-    }
-})
+  if (target.classList.contains("btn-del")) {
+    target.parentElement.remove();
+  }
+});
 
 function createElement(tagName, tagClass) {
-    const element = document.createElement(tagName);
+  const element = document.createElement(tagName);
 
-    if (tagClass) {
-        element.classList.add(tagClass);
-    }
+  if (tagClass) {
+    element.classList.add(tagClass);
+  }
 
-    return element;
+  return element;
 }
 
 function debounce(fn, ms) {
-    return function(...args) {
-        let previousCall = this.lastCall;
-        this.lastCall = Date.now();
-  
-        if (previousCall && this.lastCall - previousCall <= ms) {
-            clearTimeout(this.lastCallTimer);
-        }
+  return function (...args) {
+    let prev = this.last;
+    this.last = Date.now();
 
-        this.lastCallTimer = setTimeout(() => fn(...args), ms);
+    if (prev && this.last - prev <= ms) {
+      clearTimeout(this.lastTimer);
     }
+
+    this.lastTimer = setTimeout(() => fn(...args), ms);
+  };
 }
 
-async function searchRepository() {
-    return await fetch(`https://api.github.com/search/repositories?q=${input.value}&per_page=5`)
-        .then(response => response.json())
-        .then(response => {
+async function searchRepo() {
+  return await fetch(
+    `https://api.github.com/search/repositories?q=${input.value}&per_page=5`
+  )
+    .then((response) => response.json())
+    .then((response) => {
+      let element;
+      let item = document.querySelectorAll(".select-repo__item");
 
-            let element;
-            let item = document.querySelectorAll('.select-repositories__item');
+      result = response.items;
 
-            result = response.items;
+      if (input.value == "") {
+        selectRepo.textContent = "";
+        return;
+      }
 
-            if (input.value == '') {
-                selectRepositories.textContent = '';
-                return;
-            }
-
-            if (item.length == 0) {    
-                result.forEach((item, i) => {
-                    element = createElement('li', 'select-repositories__item');
-                    element.textContent = `${item['name']}`;
-                    selectRepositories.append(element);
-                    saveInfo(item, element);
-                });
-            
-            } else {
-                item.forEach((el, i) => {
-                    el.textContent = `${result[i]['name']}`;
-                });
-            }
-        })
-        .catch(err => console.log('repositories not found'));
+      if (item.length == 0) {
+        result.forEach((item, i) => {
+          element = createElement("li", "select-repo__item");
+          element.textContent = `${item["name"]}`;
+          selectRepo.append(element);
+          saveInfo(item, element);
+        });
+      } else {
+        item.forEach((el, i) => {
+          el.textContent = `${result[i]["name"]}`;
+        });
+      }
+    })
+    .catch((err) => console.log("repositories not found"));
 }
 
 function saveInfo(item, el) {
-    el.dataset.owner = `${item['owner']['login']}`;
-    el.dataset.stars = `${item['stargazers_count']}`;
+  el.dataset.owner = `${item["owner"]["login"]}`;
+  el.dataset.stars = `${item["stargazers_count"]}`;
 }
-  
+
 function saveRepository(el) {
-    const savedRepository = createElement('div', 'saved-repositories__item');
-    const name = createElement('p', 'saved-repositories__item--text');
-    const owner = createElement('p', 'saved-repositories__item--text');
-    const stars = createElement('p', 'saved-repositories__item--text');
-    const btnDelete = createElement('button', 'btn-delete');
+  const savedRepository = createElement("div", "saved-repo__item");
+  const name = createElement("p", "saved-repo__item--text");
+  const owner = createElement("p", "saved-repo__item--text");
+  const stars = createElement("p", "saved-repo__item--text");
+  const btnDel = createElement("button", "btn-del");
 
-    name.textContent = `Name: ${el.textContent}`;
-    owner.textContent = `Owner: ${el.dataset.owner}`
-    stars.textContent = `Stars: ${el.dataset.stars}`
+  name.textContent = `Name: ${el.textContent}`;
+  owner.textContent = `Owner: ${el.dataset.owner}`;
+  stars.textContent = `Stars: ${el.dataset.stars}`;
 
-    savedRepositories.append(savedRepository);
-    savedRepository.append(name);
-    savedRepository.append(owner);
-    savedRepository.append(stars);
-    savedRepository.append(btnDelete);
+  savedRepo.append(savedRepository);
+  savedRepository.append(name);
+  savedRepository.append(owner);
+  savedRepository.append(stars);
+  savedRepository.append(btnDel);
 }
 
 

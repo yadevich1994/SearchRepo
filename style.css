@@ -1,0 +1,83 @@
+body {
+    background: #C4C4C4;
+    box-sizing: border-box;
+    width: 500px;
+    margin: 0 auto;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+}
+
+.input-wrapper {
+    padding-top: 60px;
+}
+
+.search-input {
+    box-sizing: border-box;
+    background: #fff;
+    border: none;
+    width: 500px;
+    height: 60px;
+    padding-left: 14px;
+    font-size: 48px;
+    line-height: 56px;
+}
+
+.select-repositories {
+    box-sizing: border-box;
+    background: #E3E3E3;
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    font-size: 30px;
+    line-height: 35px;
+}
+
+.select-repositories__item {
+    box-sizing: border-box;
+    border: 2px solid #000000;
+    padding-left: 14px;
+    cursor: pointer;
+    height: 44px;
+}
+
+.select-repositories__item:hover {
+    background: #65CDF9;
+}
+
+.saved-repositories {
+    margin-top: 45px;
+}
+
+.saved-repositories__item {
+    height: 90px;
+    padding: 8px 16px;
+    position: relative;
+    border: 1px solid #000000;
+    background: #E27BEB;
+    
+}
+
+.saved-repositories__item--text {
+    margin: 0;
+    font-size: 24px;
+    line-height: 28px;
+}
+
+.btn-delete {
+    width: 45px;
+    height: 42px;
+    padding: 0;
+    position: absolute;
+    bottom: 33%;
+    right: 35px;
+    border: none;
+    cursor: pointer;
+    background: url('img/Delete.svg'),
+                 
+                no-repeat;
+}
+.btn-delete:hover {
+    transform: scale(1.2);
+    transition-duration: 300ms;
+}
